@@ -4,9 +4,12 @@ import events.SatelitteMoveListener;
 import events.SatelliteMoved;
 
 public class Balise extends ElementMobile implements SatelitteMoveListener{
+
+	boolean aLaSurface;
 	
 	public Balise(int memorySize) {
 		super(memorySize);
+		this.aLaSurface = false;
 	}
 	
 	public int profondeur() { 
@@ -14,7 +17,8 @@ public class Balise extends ElementMobile implements SatelitteMoveListener{
 	}
 	
 	protected void readSensors() {
-		this.dataSize++;
+		if(!this.aLaSurface)
+			this.dataSize++;
 	}
 	
 	public void tick() {
@@ -25,7 +29,8 @@ public class Balise extends ElementMobile implements SatelitteMoveListener{
 			Deplacement nextDepl = new MonteSurfacePourSynchro(deplSynchro);
 			this.setDeplacement(nextDepl);
 			this.resetData();
-		} 
+		}
+		this.aLaSurface = false;
 		super.tick();
 	}
 
@@ -33,6 +38,7 @@ public class Balise extends ElementMobile implements SatelitteMoveListener{
 	public void whenSatelitteMoved(SatelliteMoved arg) {
 		DeplacementBalise dp = (DeplacementBalise) this.depl;
 		dp.whenSatelitteMoved(arg, this);
+		this.aLaSurface = true;
 	}
 
 
