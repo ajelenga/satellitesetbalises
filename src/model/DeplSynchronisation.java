@@ -27,8 +27,8 @@ public class DeplSynchronisation extends DeplacementBalise {
 		if (satX > tarX - 10 && satX < tarX + 10) {
 			this.synchro = sat;
 			target.send(new SynchroEvent(this));
-			target.baliseSynchro=true;
 			this.synchro.send(new SynchroEvent(this));
+			target.baliseSynchro=true;
 		}
 	}
 
