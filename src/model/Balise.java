@@ -33,7 +33,7 @@ public class Balise extends ElementMobile implements SatelitteMoveListener{
 	}
 
 	/**
-	 * Méthode pour augmenter une donnée
+	 * Méthode pour augmenter la dataSize
 	 */
 	protected void readSensors() {
 		if(!this.aLaSurface && !this.memoryFull())
