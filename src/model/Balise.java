@@ -5,8 +5,10 @@ import events.SatelliteMoved;
 
 /**
  * Classe Balise représente par un <b>ElementMobile</b>.
+ * @author ELENGA Alphonse Junior & OUAKSEL boukhalfa
  * @see ElementMobile
  * @see SatelitteMoveListener
+ * @version 1.0
  */
 public class Balise extends ElementMobile implements SatelitteMoveListener{
 	/**
