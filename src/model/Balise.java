@@ -65,8 +65,9 @@ public class Balise extends ElementMobile implements SatelitteMoveListener{
 		DeplacementBalise dp = (DeplacementBalise) this.depl;
 		dp.whenSatelitteMoved(arg, this);
 		this.aLaSurface = true;
-		this.baliseSynchro=true;
-		this.resetData();
+		//this.baliseSynchro=true;
+		if (this.baliseSynchro)
+			this.resetData();
 	}
 
 
