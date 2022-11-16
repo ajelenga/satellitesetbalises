@@ -14,7 +14,7 @@ public class GrBalise extends GrElementMobile {
 
 	public GrBalise(GrEther ether) {
 		super(ether);
-		File path = new File("balise.png");
+		File path = new File("balise-airtag.png");
 		BufferedImage rawImage = null;
 		try {
 			rawImage = ImageIO.read(path);

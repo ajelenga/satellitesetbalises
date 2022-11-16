@@ -23,6 +23,7 @@ public class Balise extends ElementMobile implements SatelitteMoveListener{
 	
 	public void tick() {
 		this.readSensors();
+		System.out.println("data size: "+ this.dataSize);
 		if (this.memoryFull()) {
 			Deplacement redescendre = new Redescendre(this.deplacement(), this.profondeur());
 			Deplacement deplSynchro = new DeplSynchronisation(redescendre);
