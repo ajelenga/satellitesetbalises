@@ -16,6 +16,13 @@ public class Manager {
 		this.sats.add(sat);
 		sat.setManager(this);
 	}
+	public void deleteBalise(Object bal) {
+		this.bals.remove(bal);
+	}
+
+	public void deleteSatellite(Object sat) {
+		this.sats.remove(sat);
+	}
 	public void tick() {
 		for (Balise b : this.bals) {
 			b.tick();

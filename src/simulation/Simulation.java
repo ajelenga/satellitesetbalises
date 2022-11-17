@@ -21,20 +21,42 @@ import nicellipse.component.NiSpace;
 import views.GrBalise;
 import views.GrEther;
 import views.GrSatellite;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Point;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.Timer;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+
 /**
  * Classe Simulation pour lancer l'application.
  * @author ELENGA Alphonse Junior & OUAKSEL boukhalfa
  * @version 1.0
  */
+
+/**
+ * Classe Simulation pour lancer l'application.
+ *
+ * @version 2.0
+ * @since 1.0
+ */
+
 public class Simulation {
 	final int FPS_MIN = 2;
 	final int FPS_MAX = 500;
-	final int FPS_INIT = 10;
+	final int FPS_INIT = 70;
 	final int startDelay = 500 / FPS_INIT;
 	Timer animation;
 	Manager manager = new Manager();
 	Dimension worldDim = new Dimension(900, 700);
-	NiSpace world = new NiSpace("Satellite & Balises", this.worldDim);
+	NiSpace world = new NiSpace("Satellite & AirTag", this.worldDim);
 	GrEther ether = new GrEther();
 	NiRectangle sea = new NiRectangle();
 	NiRectangle sky = new NiRectangle();
@@ -43,12 +65,11 @@ public class Simulation {
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				manager.tick();
-				ether.repaint();		
+				ether.repaint();
 			}
 		};
 		this.animation = new Timer(this.startDelay, taskPerformer);
 		this.animation.setRepeats(true);
-		this.animation.start();
 	}
 
 	/**
@@ -56,10 +77,10 @@ public class Simulation {
 	 *
 	 * @return JPanel
 	 */
-	private JPanel fpsSliderPanel() {		
+	private JPanel fpsSliderPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		
+
 		JLabel label = new JLabel(" FPS :", JLabel.RIGHT);
 		JSlider framesPerSecond = new JSlider(JSlider.HORIZONTAL, FPS_MIN, FPS_MAX, FPS_INIT);
 
@@ -80,7 +101,7 @@ public class Simulation {
 		framesPerSecond.setMinorTickSpacing(10);
 		framesPerSecond.setPaintTicks(true);
 		framesPerSecond.setPaintLabels(false);
-		
+
 		panel.add(label);
 		panel.add(framesPerSecond);
 		return panel;
@@ -93,12 +114,12 @@ public class Simulation {
 	 * @return JPanel
 	 */
 	private JPanel buttonPanel() {
-		JButton start = new JButton("Start");
-		JButton stop = new JButton("Stop");
-		JButton addBalise = new JButton("Balise +1");
-		JButton delBalise = new JButton("Balise -1");
-		JButton addSatellite = new JButton("Satellite +1");
-		JButton delSatellite = new JButton("Satellite -1");
+		JButton start = new JButton("Demarer");
+		JButton stop = new JButton("Stopper");
+		JButton addBalise = new JButton("AirTag +1");
+		JButton delBalise = new JButton("AirTag -1");
+		JButton addSatellite = new JButton("Sat +1");
+		JButton delSatellite = new JButton("Sat -1");
 		stop.setEnabled(false);
 
 		start.addActionListener(new ActionListener() {
@@ -156,14 +177,12 @@ public class Simulation {
 		return panel;
 	}
 
-
 	/**
-	 * Ajoute une balise dans le manager et graphiquement
-	 *
-	 * @param sea
-	 * @param memorySize
-	 * @param startPos
-	 * @param depl
+	 * Ajout  d'une balise dans le manager et graphiquement.
+	 * @param sea La mer.
+	 * @param memorySize La mémoire de la balise.
+	 * @param startPos Position de départ.
+	 * @param depl déplacement de la balise ajouté.
 	 */
 	public void addBalise(JPanel sea, int memorySize, Point startPos, Deplacement depl) {
 		Balise bal = new Balise(memorySize);
@@ -177,18 +196,23 @@ public class Simulation {
 	}
 
 	/**
-	 * Supprime une balise dans le manager et graphiquement
+	 * Supprime une balise dans la mer par le manager et graphiquement
 	 */
 	public void deleteBalise() {
 		for (Component component : sea.getComponents()) {
-			if (component instanceof GrBalise) {
 				sea.remove(component);
 				manager.deleteBalise(((GrBalise) component).getModel());
-			}
 			return;
 		}
 	}
 
+	/**
+	 * Ajout  d'une balise dans le manager et graphiquement.
+	 * @param sky Le ciel.
+	 * @param memorySize La mémoire du satellite.
+	 * @param startPos Position de départ.
+	 * @param vitesse vitesse du satellite que l'on ajoute.
+	 */
 	public void addSatelitte(JPanel sky, int memorySize, Point startPos, int vitesse) {
 		Satellite sat = new Satellite(memorySize);
 		sat.setPosition(startPos);
@@ -199,6 +223,20 @@ public class Simulation {
 		sky.add(grSat);
 	}
 
+	/**
+	 * Supprime un satellite dans le ciel par le manager le ciel
+	 */
+	public void deleteSatellite() {
+		for (Component component : sky.getComponents()) {
+				sky.remove(component);
+				manager.deleteSatellite(((GrSatellite) component).getModel());
+			return;
+		}
+	}
+
+	/**
+	 * Lancement de l'application
+	 */
 	public void launch() {
 		JLayeredPane main = new JLayeredPane();
 		main.setOpaque(true);
@@ -209,10 +247,10 @@ public class Simulation {
 		this.ether.setOpaque(false);
 		this.ether.setDimension(this.worldDim);
 
-		NiRectangle sky = new NiRectangle();
 		sky.setBackground(Color.white);
 		sky.setDimension(new Dimension(this.worldDim.width, this.worldDim.height / 2));
-		NiRectangle sea = new NiRectangle();
+		//ajout de bordure autour du ciel
+		sky.setBorder(BorderFactory.createMatteBorder(2, 2, 0, 2, Color.black));
 		sea.setBackground(Color.blue);
 		sea.setDimension(new Dimension(this.worldDim.width, this.worldDim.height / 2));
 		sea.setLocation(new Point(0, this.worldDim.height / 2));
@@ -222,24 +260,20 @@ public class Simulation {
 		this.addSatelitte(sky, 100000, new Point(400, 90), 3);
 		this.addSatelitte(sky, 100000, new Point(500, 140), 4);
 		this.addSatelitte(sky, 100000, new Point(600, 10), 1);
-		//this.addBalise(sea, 300, new Point(400, 200), new DeplHorizontal(50, 750));
-		//this.addBalise(sea, 400, new Point(100, 100), new DeplVertical(50, 200));
-		//this.addBalise(sea, 200, new Point(0, 160), new DeplHorizontal(0, 800));
-		//this.addBalise(sea, 500, new Point(200, 100), new DeplVertical(130, 270));
-		this.addBalise(sea, 150, new Point(300, 100), new DeplHorizontal(200, 600));
+		this.addBalise(sea, 90, new Point(300, 100), new DeplHorizontal(200, 600));
 		main.add(sky, JLayeredPane.DEFAULT_LAYER);
 		main.add(sea, JLayeredPane.DEFAULT_LAYER);
 		main.add(this.ether, JLayeredPane.POPUP_LAYER);
-		
+
 		this.world.setLayout(new BoxLayout(this.world, BoxLayout.Y_AXIS));
 		this.world.add(main);
 		this.world.add(this.fpsSliderPanel());
+		this.world.add(this.buttonPanel());
 		this.world.openInWindow();
 		this.animation();
 	}
 
 	public static void main(String[] args) {
-
 		new Simulation().launch();
 	}
 
