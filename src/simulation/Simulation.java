@@ -58,6 +58,7 @@ public class Simulation {
 			public void actionPerformed(ActionEvent evt) {
 				manager.tick();
 				ether.repaint();
+				// pour le problème de thread
 			}
 		};
 		this.animation = new Timer(this.startDelay, taskPerformer);
