@@ -14,7 +14,7 @@ public class GrSatellite extends GrElementMobile {
 
 	public GrSatellite(GrEther ether) {
 		super(ether);
-		File path = new File("satellite.png");
+		File path = new File("sat.png");
 		BufferedImage rawImage = null;
 		try {
 			rawImage = ImageIO.read(path);

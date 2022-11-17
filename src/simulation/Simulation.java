@@ -1,22 +1,19 @@
 package simulation;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
-
-import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import model.Balise;
 import model.DeplHorizontal;
 import model.DeplSatellite;
-import model.DeplVertical;
 import model.Deplacement;
 import model.Manager;
 import model.Satellite;
-import nicellipse.component.NiRectangle;
+import nicellipse.component.NiImage;
 import nicellipse.component.NiSpace;
 import views.GrBalise;
 import views.GrEther;
@@ -40,14 +37,6 @@ import javax.swing.Box;
  * @author ELENGA Alphonse Junior & OUAKSEL boukhalfa
  * @version 1.0
  */
-
-/**
- * Classe Simulation pour lancer l'application.
- *
- * @version 2.0
- * @since 1.0
- */
-
 public class Simulation {
 	final int FPS_MIN = 2;
 	final int FPS_MAX = 500;
@@ -58,8 +47,11 @@ public class Simulation {
 	Dimension worldDim = new Dimension(900, 700);
 	NiSpace world = new NiSpace("Satellite & AirTag", this.worldDim);
 	GrEther ether = new GrEther();
-	NiRectangle sea = new NiRectangle();
-	NiRectangle sky = new NiRectangle();
+	NiImage sea = new NiImage(new File("sea.png"));
+	NiImage sky = new NiImage(new File("sky.jpg"));
+
+	public Simulation() throws IOException {
+	}
 
 	public void animation() {
 		ActionListener taskPerformer = new ActionListener() {
@@ -184,7 +176,7 @@ public class Simulation {
 	 * @param startPos Position de départ.
 	 * @param depl déplacement de la balise ajouté.
 	 */
-	public void addBalise(JPanel sea, int memorySize, Point startPos, Deplacement depl) {
+	public void addBalise(NiImage sea, int memorySize, Point startPos, Deplacement depl) {
 		Balise bal = new Balise(memorySize);
 		bal.setPosition(startPos);
 		bal.setDeplacement(depl);
@@ -199,6 +191,7 @@ public class Simulation {
 	 * Supprime une balise dans la mer par le manager et graphiquement
 	 */
 	public void deleteBalise() {
+		if(sea.getComponents().length<=1) return;
 		for (Component component : sea.getComponents()) {
 				sea.remove(component);
 				manager.deleteBalise(((GrBalise) component).getModel());
@@ -213,7 +206,7 @@ public class Simulation {
 	 * @param startPos Position de départ.
 	 * @param vitesse vitesse du satellite que l'on ajoute.
 	 */
-	public void addSatelitte(JPanel sky, int memorySize, Point startPos, int vitesse) {
+	public void addSatelitte(NiImage sky, int memorySize, Point startPos, int vitesse) {
 		Satellite sat = new Satellite(memorySize);
 		sat.setPosition(startPos);
 		sat.setDeplacement(new DeplSatellite(-10, 1000, vitesse));
@@ -227,6 +220,7 @@ public class Simulation {
 	 * Supprime un satellite dans le ciel par le manager le ciel
 	 */
 	public void deleteSatellite() {
+		if(sky.getComponents().length<=1) return;
 		for (Component component : sky.getComponents()) {
 				sky.remove(component);
 				manager.deleteSatellite(((GrSatellite) component).getModel());
@@ -237,7 +231,7 @@ public class Simulation {
 	/**
 	 * Lancement de l'application
 	 */
-	public void launch() {
+	public void launch() throws IOException {
 		JLayeredPane main = new JLayeredPane();
 		main.setOpaque(true);
 		main.setSize(this.worldDim);
@@ -247,7 +241,6 @@ public class Simulation {
 		this.ether.setOpaque(false);
 		this.ether.setDimension(this.worldDim);
 
-		sky.setBackground(Color.white);
 		sky.setDimension(new Dimension(this.worldDim.width, this.worldDim.height / 2));
 		//ajout de bordure autour du ciel
 		sky.setBorder(BorderFactory.createMatteBorder(2, 2, 0, 2, Color.black));
@@ -273,7 +266,7 @@ public class Simulation {
 		this.animation();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		new Simulation().launch();
 	}
 
