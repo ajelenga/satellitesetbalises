@@ -45,7 +45,7 @@ public class Simulation {
 	Timer animation;
 	Manager manager = new Manager();
 	Dimension worldDim = new Dimension(900, 700);
-	NiSpace world = new NiSpace("Satellite & AirTag", this.worldDim);
+	NiSpace world = new NiSpace("Satellite & HumainAirTag", this.worldDim);
 	GrEther ether = new GrEther();
 	NiImage sea = new NiImage(new File("sea.png"));
 	NiImage sky = new NiImage(new File("sky.jpg"));
